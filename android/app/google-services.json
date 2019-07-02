@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "794317251662",
+    "firebase_url": "https://chatonlinenos.firebaseio.com",
+    "project_id": "chatonlinenos",
+    "storage_bucket": "chatonlinenos.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:794317251662:android:f4cd2816091224a1",
+        "android_client_info": {
+          "package_name": "br.com.iury.chat_lanlink"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "794317251662-usf41j9di0e05evi77r8u55907reickc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.iury.chat_lanlink",
+            "certificate_hash": "8b39f9155de1b7c5da3e112cf5b0c33c8f5751b4"
+          }
+        },
+        {
+          "client_id": "794317251662-0bnba733sg54fkdd5v49hph19129clur.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDchGdkl8Lzl6uwqiDVbziDFkOTX26tbXs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "794317251662-0bnba733sg54fkdd5v49hph19129clur.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
