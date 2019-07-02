@@ -24,7 +24,7 @@ void main() {
    * Função para exibir quando houver alguma alteração do BD. (OBSERVANDO O BD)
    * Firestore.instance.collection("mensagens").snapshots().listen((snapshot) {});
    */
-  Firestore.instance.collection("usuarios").document().collection("arqmidia").document().setData(data)
+  //Firestore.instance.collection("usuarios").document().collection("arqmidia").document().setData(data)
   
   runApp(MyApp(
 
@@ -79,10 +79,69 @@ class _ChatScreenState extends State<ChatScreen> {
           elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0,
         ),
         body: Column(
-          
+          children: <Widget>[
+            Container(
+              //Container vai ser um retangulo branco onde vai ter o campo de texto
+              decoration: BoxDecoration(
+                //Cor
+                color: Theme.of(context).cardColor,
+              ),
+              child: TextComposer(),
+            )
+          ],
         ),
       ),
     );
   }
 }
 
+class TextComposer extends StatefulWidget {
+  @override
+  _TextComposerState createState() => _TextComposerState();
+}
+
+class _TextComposerState extends State<TextComposer> {
+  @override
+  Widget build(BuildContext context) {
+    //Especificando as cores dos meus icones
+    return IconTheme(
+      /**
+       * Quando eu quiser que uma cor seja aplicada apenas em uma parte
+       * do meu app, eu tenho que utilizar o Theme, especificar o tema logo nele
+       *
+       * Todos que são filhos do meu IconTheme terão a cor do meu accentColor
+       * Que especifiquei a cima.
+       *
+       * Margin é fora do objeto, e margin é dentro do OBJETO
+       */
+      data: IconThemeData(color: Theme.of(context).accentColor),
+      child: Container(
+        //Margin, coloquei como const pois ele não vai mudar.
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+        //Decoração caso for IOS
+        decoration: Theme.of(context).platform == TargetPlatform.iOS ?
+        BoxDecoration(
+          border: Border(top: BorderSide(color: Colors.grey[200]))
+        ) :
+            null,
+        //Coloquei um filho para poder colocar o icone da camera do texto
+        //E o botão enviar.
+        child: Row(
+          children: <Widget>[
+            Container(
+              child: IconButton(
+                  icon: Icon(Icons.photo_camera),
+                  onPressed: () {}
+              ),
+            ),
+            Expanded(
+              child: TextField(
+                decoration: InputDecoration.collapsed(hintText: "Enviar uma mensagem"),
+              ),
+            )
+          ],
+        ) ,
+      ),
+    );
+  }
+}
