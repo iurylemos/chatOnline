@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 void main() {
   /** Tenho uma coleção teste, e estou colocando um documento teste dentro.
@@ -246,7 +250,41 @@ class _TextComposerState extends State<TextComposer> {
           children: <Widget>[
             Container(
               child:
-                  IconButton(icon: Icon(Icons.photo_camera), onPressed: () {}),
+                  IconButton(icon: Icon(Icons.photo_camera),
+                      onPressed: () async {
+                        //Ao apertar o botão da camêra, vou certificar que o usuário tá logado
+                        await _certificarLogin();
+                        //Agora vou pegar a imagem, dentro boto a fonte é a camera
+                        //E atribuindo ao imgFile
+                         File imgFile = await ImagePicker.pickImage(source: ImageSource.camera);
+                         if(imgFile == null) return;
+                         //caso contrário faço o upload
+                        //Um grande sistema utiliza child
+                        //Para que o nome do arquivo seja único
+                        //Coloco dentro do child
+                        //Transformo um ID em uma STRING
+                        //E Concateno com o Tempo em Milisegundos
+                        /**
+                         * Pegamos a referencia do Storage
+                         * Demos um child
+                         * Dentro do child passando o nome do nosso arquivo
+                         * Nesse nome estou pegando o ID do usuário e o tempo em que enviou
+                         * E assim o nome da imagem fica único!!
+                         *
+                         * Se eu quiser amazenar em uma pasta basta eu colocar
+                         * depois do ref, um child("fotos"). e assim vou navegando
+                         * Como se fosse em um sistema de arquivos
+                         *
+                         * E como o putFile me retorna do tipo StorageUploadTask, coloquei
+                         * para isso me retornar para a variavel task do mesmo tipo
+                         */
+                         StorageUploadTask task = FirebaseStorage.instance.ref().
+                          child(googleSignIn.currentUser.id.toString() +
+                             DateTime.now().millisecondsSinceEpoch.toString()).putFile(imgFile);
+                        StorageTaskSnapshot taskSnapshot = await task.onComplete;
+                        String url = await taskSnapshot.ref.getDownloadURL();
+                        _enviarMensagem(imgUrl: url);
+                      }),
             ),
             Expanded(
               child: TextField(
