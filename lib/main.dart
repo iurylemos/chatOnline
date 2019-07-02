@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:firebase_auth/firebase_auth.dart'
+import 'package:firebase_auth/firebase_auth.dart';
 
 void main() {
   /** Tenho uma coleção teste, e estou colocando um documento teste dentro.
@@ -68,6 +68,27 @@ Future<Null> _certificarLogin() async {
     await auth.signInWithCredential(GoogleAuthProvider.getCredential(
         idToken: credenciais.idToken, accessToken: credenciais.accessToken));
   }
+}
+
+//Função pegar um texto que digitamos e enviar para o banco
+
+_pegandoTexto(String text) async {
+  //Certificar que o usuário está logado
+  await _certificarLogin();
+  _enviarMensagem(text: text);
+}
+
+void _enviarMensagem({String text, String imgUrl}) {
+  //Pegar o dado da mensagem e enviar para o fireBase
+  Firestore.instance.collection("mensagens").add(
+    {
+      //Aqui dentro temos que passar um mapa
+      "text" : text,
+      "imgUrl" : imgUrl,
+      "nomeUsuario" : googleSignIn.currentUser.displayName,
+      "fotoUsuario" : googleSignIn.currentUser.photoUrl
+    }
+  );
 }
 
 
@@ -143,8 +164,20 @@ class TextComposer extends StatefulWidget {
 }
 
 class _TextComposerState extends State<TextComposer> {
+  //Controllador para pegar a mensagem do texto
+  final _textController = TextEditingController();
+
+
   //Variavel para controlar se estou inserindo um texto ou não
   bool _isComposing = false;
+
+  //Função para resetar o controller depois que for executado.
+  void _reset() {
+    setState(() {
+      _textController.clear();
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -178,6 +211,7 @@ class _TextComposerState extends State<TextComposer> {
             ),
             Expanded(
               child: TextField(
+                controller: _textController,
                 decoration:
                     InputDecoration.collapsed(hintText: "Enviar uma mensagem"),
                 onChanged: (text) {
@@ -185,6 +219,12 @@ class _TextComposerState extends State<TextComposer> {
                   setState(() {
                     _isComposing = text.length > 0;
                   });
+                },
+                //Estou colocando o onSubmitted aqui pois podemos enviar a mensagem
+                //Tanto pelo botão, quanto pelo botão no teclado.
+                onSubmitted: (text) {
+                  _pegandoTexto(text);
+                  _reset();
                 },
               ),
             ),
@@ -196,12 +236,18 @@ class _TextComposerState extends State<TextComposer> {
                         child: Text("Enviar"),
                         //Estou botando como nulo, pois se não tiver mensagem
                         //E ele clique em enviar, vai está desabilidado
-                        onPressed: _isComposing ? () {} : null,
+                        onPressed: _isComposing ? () {
+                          _pegandoTexto(_textController.text);
+                          _reset();
+                        } : null,
                       )
                     //Caso seja ANDROID ele vai retornar um botão
                     : IconButton(
                         icon: Icon(Icons.send),
-                        onPressed: _isComposing ? () {} : null,
+                        onPressed: _isComposing ? () {
+                          _pegandoTexto(_textController.text);
+                          _reset();
+                        } : null,
                       ))
           ],
         ),
