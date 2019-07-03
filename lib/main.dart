@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:chat_lanlink/principal.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -99,14 +100,14 @@ void _enviarMensagem({String text, String imgUrl}) {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "Chat Nós",
+    return new MaterialApp(
+      title: "WhatNós",
       debugShowCheckedModeBanner: false,
       //SE O TEMA FOR IOS, ELE EXECUTA EM IOS, SE FOR ANDROID ELE EXECUTA O OUTRO.
       theme: Theme.of(context).platform == TargetPlatform.iOS
           ? kIOSTheme
           : kDefaultTheme,
-      home: ChatScreen(),
+      home: WhatNosHome(),
     );
   }
 }
@@ -125,7 +126,7 @@ class _ChatScreenState extends State<ChatScreen> {
       top: false,
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Chat Nós"),
+          title: Image.network("https://nos.lanlink.com.br/content/uploads/photos/2018/06/nos_bd6da394537859f0467ebd24e2e1810b.png"),
           centerTitle: true,
           //Modificar a elevação, no Android tem, mas no IOS não tem.
           //Utilizei a plataforma novamente para definir os parametros
