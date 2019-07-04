@@ -1,3 +1,4 @@
+import 'package:chat_lanlink/pages/chat_interno.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_lanlink/models/chat_model.dart';
 
@@ -7,8 +8,17 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+
+  Future<List<ChatModel>> _getUsuarios() {
+      new ChatModel(
+        nome: "BigNardo",
+        mensagem: "Teste",
+      );
+  }
+
   @override
   Widget build(BuildContext context) {
+
     return new ListView.builder(
         itemCount: dadosFicticios.length,
         itemBuilder: (context, index) => new Column(
@@ -16,27 +26,35 @@ class _ChatScreenState extends State<ChatScreen> {
             new Divider(
               height: 10.0,
             ),
-            new ListTile(
-              leading: new CircleAvatar(
-                foregroundColor: Theme.of(context).primaryColor,
-                backgroundColor: Colors.grey,
-                backgroundImage: new NetworkImage(dadosFicticios[index].avatarUrl),
-              ),
-              title: new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  new Text(dadosFicticios[index].nome,
-                    style: new TextStyle(fontWeight: FontWeight.bold),
+            new Container(
+              child: GestureDetector(
+                child: new ListTile(
+                  leading: new CircleAvatar(
+                    foregroundColor: Theme.of(context).primaryColor,
+                    backgroundColor: Colors.grey,
+                    backgroundImage: new NetworkImage(dadosFicticios[index].avatarUrl),
                   ),
-                  new Text(dadosFicticios[index].tempo,
-                    style: new TextStyle(color: Colors.grey, fontSize: 14.0),
+                  title: new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      new Text(dadosFicticios[index].nome,
+                        style: new TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      new Text(dadosFicticios[index].tempo,
+                        style: new TextStyle(color: Colors.grey, fontSize: 14.0),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              subtitle: new Container(
-                padding: const EdgeInsets.only(top: 5.0),
-                child: new Text(dadosFicticios[index].mensagem,
-                  style: new TextStyle(color: Colors.grey, fontSize: 15.0),
+                  subtitle: new Container(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: new Text(dadosFicticios[index].mensagem,
+                      style: new TextStyle(color: Colors.grey, fontSize: 15.0),
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => ChatInterno()));
+                  },
                 ),
               ),
             )

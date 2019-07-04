@@ -1,4 +1,3 @@
-import 'package:chat_lanlink/main.dart';
 import 'package:chat_lanlink/pages/chat_mensagem.dart';
 import 'package:chat_lanlink/pages/text_composer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
